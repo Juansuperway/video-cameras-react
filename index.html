@@ -2,32 +2,64 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
-  <title>Visualización de Cámaras</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Visualización de cámaras</title>
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
+  <div id="root"></div>
 
-  <div class="app">
-    <!-- Sidebar -->
-    <aside class="sidebar">
-      <h2>Cámaras</h2>
-      <ul class="camera-list">
-        <li class="camera-item active">Entrada</li>
-        <li class="camera-item">Patio</li>
-        <li class="camera-item">Garaje</li>
-      </ul>
-    </aside>
+  <!-- React y ReactDOM desde CDN -->
+  <script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
 
-    <!-- Main content --> 
-    <main class="viewer">
-      <h2>Cámara: Entrada</h2>
-      <div class="video-container">
-        <div class="video-placeholder">
-          VIDEO
-        </div>
-      </div>
-    </main>
-  </div>
+  <!-- Código React puro -->
+  <script>
+    const { useState } = React;
 
+    function CameraViewer() {
+      const [activeCamera, setActiveCamera] = useState('Entrada');
+      const cameras = ['Entrada', 'Patio', 'Garaje'];
+
+      return React.createElement(
+        'div',
+        { className: 'app' },
+        React.createElement(
+          'aside',
+          { className: 'sidebar' },
+          React.createElement('h2', null, 'Cámaras'),
+          React.createElement(
+            'ul',
+            { className: 'camera-list' },
+            cameras.map(camera =>
+              React.createElement(
+                'li',
+                {
+                  key: camera,
+                  className: 'camera-item' + (activeCamera === camera ? ' active' : ''),
+                  style: { cursor: 'pointer' },
+                  onClick: () => setActiveCamera(camera)
+                },
+                camera
+              )
+            )
+          )
+        ),
+        React.createElement(
+          'main',
+          { className: 'viewer' },
+          React.createElement('h2', null, 'Cámara: ' + activeCamera),
+          React.createElement(
+            'div',
+            { className: 'video-container' },
+            React.createElement('div', { className: 'video-placeholder' }, 'VIDEO: ' + activeCamera)
+          )
+        )
+      );
+    }
+
+    const root = ReactDOM.createRoot(document.getElementById('root'));
+    root.render(React.createElement(CameraViewer));
+  </script>
 </body>
 </html>
